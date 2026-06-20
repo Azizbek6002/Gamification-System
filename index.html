@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Site3 — Gamification UI</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+
+<body>
+  <div class="bg" aria-hidden="true"></div>
+
+  <!-- Onboarding modal -->
+  <div class="modal" id="onboarding" aria-hidden="true">
+    <div class="modal-card">
+      <div class="modal-top">
+        <h2>Quick onboarding</h2>
+        <button class="icon-btn" id="closeOnboarding" title="Close">✕</button>
+      </div>
+
+      <div class="steps">
+        <div class="step" data-step="1">
+          <h3>1) XP to‘plang</h3>
+          <p>Har interaction XP beradi. Level tez ko‘tariladi.</p>
+        </div>
+        <div class="step" data-step="2">
+          <h3>2) Badges unlock</h3>
+          <p>Ma’lum shartlar bajarilganda badge ochiladi.</p>
+        </div>
+        <div class="step" data-step="3">
+          <h3>3) Streak saqlang</h3>
+          <p>Har kuni kirib streakni ko‘paytiring.</p>
+        </div>
+        <div class="step" data-step="4">
+          <h3>4) Mini-game</h3>
+          <p>1 daqiqa ichida coin yig‘ib XP oling.</p>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn ghost" id="prevStep">← Prev</button>
+        <div class="dots" id="dots"></div>
+        <button class="btn" id="nextStep">Next →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast" aria-hidden="true"></div>
+
+  <header class="header">
+    <div class="brand">
+      <div class="logo">⚡</div>
+      <div>
+        <h1>Gamification System</h1>
+        <p class="muted">Engagement oshirish uchun UI elements</p>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <button class="btn ghost" id="resetAll">Reset</button>
+      <button class="btn" id="openOnboarding">Onboarding</button>
+      <button class="btn ghost" id="toggleSound">🔊 Sound: ON</button>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- 1) Progress bar + level up -->
+    <section class="card">
+      <div class="row">
+        <div>
+          <h2>1) Progress + Level system</h2>
+          <p class="muted">Har action XP beradi. 100 XP = level up (keyin scale).</p>
+        </div>
+        <button class="btn" id="doAction">+ XP Action</button>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <span class="k">Level</span>
+          <span class="v" id="level">1</span>
+        </div>
+        <div class="stat">
+          <span class="k">XP</span>
+          <span class="v"><span id="xp">0</span> / <span id="xpNeed">100</span></span>
+        </div>
+        <div class="stat">
+          <span class="k">Coins</span>
+          <span class="v"><span id="coins">0</span> 🪙</span>
+        </div>
+      </div>
+
+      <div class="progress-wrap">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="progress-meta">
+          <span class="muted">Progress</span>
+          <span class="mono" id="progressPercent">0%</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2) Achievement badges -->
+    <section class="card">
+      <div class="row">
+        <div>
+          <h2>2) Achievement Badges</h2>
+          <p class="muted">Unlock bo‘lganda animatsiya + toast.</p>
+        </div>
+        <button class="btn ghost" id="claimBadgeDemo">Test unlock</button>
+      </div>
+
+      <div class="badges" id="badges"></div>
+    </section>
+
+    <!-- 4) Daily streak -->
+    <section class="card">
+      <div class="row">
+        <div>
+          <h2>4) Daily streak counter</h2>
+          <p class="muted">Har kuni kirganda streak +1 bo‘ladi (1 marta).</p>
+        </div>
+        <button class="btn" id="checkIn">Daily check-in</button>
+      </div>
+
+      <div class="streak">
+        <div class="streak-left">
+          <div class="flame" id="flame">🔥</div>
+          <div>
+            <div class="big" id="streakCount">0</div>
+            <div class="muted">days streak</div>
+          </div>
+        </div>
+        <div class="streak-right">
+          <div class="muted">Last check-in</div>
+          <div class="mono" id="lastCheckin">—</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5) Mini-game -->
+    <section class="card">
+      <div class="row">
+        <div>
+          <h2>5) Mini-game inside UI</h2>
+          <p class="muted">60s ichida coin yig‘ing (hover/click = fun).</p>
+        </div>
+        <div class="row-inline">
+          <button class="btn" id="startGame">Start</button>
+          <button class="btn ghost" id="stopGame">Stop</button>
+        </div>
+      </div>
+
+      <div class="game">
+        <div class="game-top">
+          <div class="pill">Time: <span class="mono" id="gameTime">60</span>s</div>
+          <div class="pill">Score: <span class="mono" id="gameScore">0</span></div>
+          <div class="pill">Best: <span class="mono" id="gameBest">0</span></div>
+        </div>
+
+        <div class="arena" id="arena">
+          <div class="arena-hint muted">Start bos → coinlar chiqadi 🪙</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6) Easter eggs -->
+    <section class="card">
+      <h2>6) Easter eggs + hidden features</h2>
+      <p class="muted">Konami code: ↑ ↑ ↓ ↓ ← → ← → B A</p>
+
+      <div class="easter">
+        <div class="pill">Status: <span class="mono" id="easterStatus">Locked</span></div>
+        <div class="pill">Hint: <span class="mono">Try keyboard</span></div>
+      </div>
+    </section>
+
+    <!-- 7) Sound effects -->
+    <section class="card">
+      <h2>7) Sound effects</h2>
+      <p class="muted">Interaction’lar uchun yengil “click / reward / levelup” audio.</p>
+      <div class="sound-row">
+        <button class="btn" id="soundClick">Click sound</button>
+        <button class="btn ghost" id="soundReward">Reward sound</button>
+        <button class="btn ghost" id="soundLevel">Level-up sound</button>
+      </div>
+    </section>
+
+    <!-- 8) Collectibles -->
+    <section class="card">
+      <h2>8) Collectible items in UI</h2>
+      <p class="muted">Coinlar to‘plang → Inventory ga tushadi (persist).</p>
+
+      <div class="inventory">
+        <div class="inv-top">
+          <div class="pill">Inventory</div>
+          <button class="btn ghost" id="clearInventory">Clear</button>
+        </div>
+        <div class="inv-grid" id="inventoryGrid"></div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <span class="muted">Site3 — Gamification UI Demo</span>
+    </footer>
+  </main>
+
+  <script src="./app.js"></script>
+</body>
+</html>
